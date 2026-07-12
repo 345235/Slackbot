@@ -14,5 +14,13 @@
     "@slack/bolt": "^4.7.3",
     "axios": "^1.18.1",
     "dotenv": "^17.4.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/345235/Slackbot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/345235/Slackbot/issues"
+  },
+  "homepage": "https://github.com/345235/Slackbot#readme"
 }

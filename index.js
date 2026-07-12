@@ -29,4 +29,3 @@ app.command("/simple-help", async ({ ack, respond }) => {
    
   });
 });
-
