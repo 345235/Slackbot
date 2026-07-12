@@ -9,7 +9,7 @@ const app = new App({
   socketMode: true,
 });
 
-app.command("/prodobot-ping", async ({ command, ack, respond }) => {
+app.command("/hackbot-ping", async ({ command, ack, respond }) => {
   const start = Date.now();
   await ack();
   const latency = Date.now() - start;
@@ -25,17 +25,8 @@ app.command("/simple-help", async ({ ack, respond }) => {
   await ack();
   await respond({
     text: `Available Commands:
-    /simplebot-ping - Check bot latency
-    /simple-catfact - Get a cat fact`,
+    /hackbot-ping - Check bot latency`
+   
   });
 });
-app.command("/simple-catfact", async ({ ack, respond }) => {
-  await ack();
 
-  try {
-    const response = await axios.get("https://catfact.ninja/fact");
-    await respond({ text: `Cat Fact:\n${response.data.fact}` });
-  } catch (err) {
-    await respond({ text: "Failed to fetch a cat fact." });
-  }
-});
