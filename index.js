@@ -24,8 +24,6 @@ app.command("/hackbot-ping", async ({ command, ack, respond }) => {
 app.command("/simple-help", async ({ ack, respond }) => {
   await ack();
   await respond({
-    text: `Available Commands:
-    /hackbot-ping - Check bot latency`
-   
+    text: "Available Commands:/hackbot-ping - Check bot latency"
   });
 });
