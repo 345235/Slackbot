@@ -27,3 +27,32 @@ app.command("/simple-help", async ({ ack, respond }) => {
     text: "Available Commands:/hackbot-ping - Check bot latency"
   });
 });
+
+app.command("/hackbot-ask", async ({ command, ack, respond }) => {
+  await ack();
+  const question = command.text;
+  try {
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: question }],
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+      }
+    );
+
+    const answer = response.data.choices[0].message.content;
+    await respond({ text: answer });
+  }
+  catch (error) {
+    console.error("Error fetching response from OpenAI:", error);
+    await respond({ text: "Sorry, I couldn't get an answer from OpenAI." });
+  }
+});
+
+
