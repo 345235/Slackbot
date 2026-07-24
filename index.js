@@ -24,11 +24,17 @@ app.command("/hackbot-ping", async ({ command, ack, respond }) => {
 app.command("/simple-help", async ({ ack, respond }) => {
   await ack();
   await respond({
-    text: "Available Commands:/hackbot-ping - Check bot latency"
+    text: "Available Commands:",
+          "/hackbot-ping - Check bot latency":
+          "/hackbot-repo - Gives you the repo from this slackbot",
+          "/hackbot-github - Posts infos and a link for your github account":
+          "/hackbot-todo - makes a todo for you or other",
+          "/hackbot-todocomplete - marked the todo you complet as complete":
+          "/hackbot-tododelete - deletes the todo you created"
   });
 });
 
-app.command("/hackbot-ask", async ({ command, ack, respond }) => {
+/*app.command("/hackbot-ask", async ({ command, ack, respond }) => {
   await ack();
   const question = command.text;
   try {
@@ -53,6 +59,7 @@ app.command("/hackbot-ask", async ({ command, ack, respond }) => {
     console.error("Error fetching response from OpenAI:", error);
     await respond({ text: "Sorry, I couldn't get an answer from OpenAI." });
   }
-});
+});*/
+
 
 
