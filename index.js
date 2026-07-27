@@ -93,6 +93,6 @@ const todo = await axios.put(`https://jsonplaceholder.typicode.com/todos/${todoI
   completed: true,
 });
 await respond({
-  text: `Todo: ${todo.data.title} ID: ${todo.data.id} status: ${todo.data.completed ? "Completed" : "Not Completed"}`
+  text: `Todo: ${todo.data.title} ID: ${todo.data.id} status: ${todo.data.completed ? "Completed"}
 })
 })
