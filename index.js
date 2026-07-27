@@ -54,7 +54,11 @@ app.command ("/hackbot-github", async (command, ack, respond) => {
   }
   const user = response.data;
   await respond ({
-    text: `Github User: ${user.login}\nName: ${user.name}\nPublic Repos: ${user.public_repos}\nProfile Link ${user.html_url}` 
+    text: `
+    Github User: ${user.login}
+    \nName: ${user.name}
+    \nPublic Repos: ${user.public_repos}
+    \nProfile Link ${user.html_url}` 
   })
 
   
@@ -74,7 +78,10 @@ app.command("/hackbot-todo", async ({ command, ack, respond}) => {
   completed: false,
   });
   await respond({
-    text: `Todo: ${todo.data.title} ID: ${todo.data.id} status: ${todo.data.completed ? "Completed" : "Not Completed"}` 
+    text: `
+    Todo: ${todo.data.title} 
+    ID: ${todo.data.id} 
+    status: ${todo.data.completed ? "Completed" : "Not Completed"}` 
     
   });
 });
@@ -93,6 +100,9 @@ const todo = await axios.put(`https://jsonplaceholder.typicode.com/todos/${todoI
   completed: true,
 });
 await respond({
-  text: `Todo: ${todo.data.title} ID: ${todo.data.id} status: ${todo.data.completed ? "Completed"}
+  text: `
+  Todo: ${todo.data.title} 
+  ID: ${todo.data.id} 
+  status: ${todo.data.completed ? "Completed" : "not completed"  } `
 })
 })
