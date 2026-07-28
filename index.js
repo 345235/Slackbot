@@ -34,19 +34,17 @@ app.command("/simple-help", async ({ ack, respond }) => {
 });
 
 app.command("/hackbot-repo", async ({ ack , respond}) => {
-  await ack
+  await ack();
   await respond ({
-    text:"Thats the repo of this slackbot https://github.com/345235/Slackbot :"
+    text:"Thats the repo of this slackbot https://github.com/345235/Slackbot"
   })
-
+  
 })
 
-
-
-app.command ("/hackbot-github", async (command, ack, respond) => {
+app.command("/hackbot-github", async ({ command, ack, respond }) => {
   await ack();
 
-  const username = command.text?.trim();
+  const username = (command.text || "").trim();
   if (!username) {
     await respond({
       text: "Please provide a GitHub username. Usage: /hackbot-github <username>",
@@ -55,16 +53,14 @@ app.command ("/hackbot-github", async (command, ack, respond) => {
   }
 
   try {
-    const response = await axios.get(`https://api.github.com/users/${username}`);
-    const user = response.data;
-
+    const res = await axios.get(`https://api.github.com/users/${encodeURIComponent(username)}`);
+    const user = res.data;
     await respond({
-      text: `
-Github User: ${user.login}
-Name: ${user.name || "N/A"}
-Public Repos: ${user.public_repos}
-Profile Link: ${user.html_url}
-      `,
+      text:
+        `Github User: ${user.login}\n` +
+        `Name: ${user.name || "N/A"}\n` +
+        `Public Repos: ${user.public_repos}\n` +
+        `Profile Link: ${user.html_url}`,
     });
   } catch (error) {
     await respond({
@@ -74,26 +70,36 @@ Profile Link: ${user.html_url}
 });
 
 
+
+//
 app.command("/hackbot-todo", async ({ command, ack, respond}) => {
   await ack();
-  if (command.text === "") {
+  if (!command.text) {
     await respond({
       text:"Please provide a todo title. Usage: /hackbot-todo <title>"
     })
+    return;
   }
+
+  try {
   const todo = await axios.post("https://jsonplaceholder.typicode.com/todos", {
-  userId: 1,
   title: command.text,
   completed: false,
   });
   await respond({
     text: `
     Todo: ${todo.data.title} 
-    ID: ${todo.data.id} 
-  `
     
+
+  ` 
+   
+  });
   }
-);
+  catch (error) {
+    await respond({
+      text: `Could not create your todo.`,
+    });
+  }
 });
 
 

@@ -1,7 +1,7 @@
 {
   "name": "slackbot",
   "version": "1.0.0",
-  "description": "",
+  "description": "I made a slackbot that runs on a nest and respons 24/7",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
