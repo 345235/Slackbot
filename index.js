@@ -2,6 +2,7 @@ const axios = require("axios");
 require("dotenv").config();
 
 const { App } = require("@slack/bolt");
+const { getGithubUsername, setGithubUsername } = require ("./store")
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -27,7 +28,8 @@ app.command("/simple-help", async ({ ack, respond }) => {
     text: "Available Commands:"
     + "\n/hackbot-ping - Check bot latency"
     + "\n/hackbot-repo - Get the bot's repository link"
-    + "\n/hackbot-github - Posts infos and a link for your github account"
+    + "\n/hackbot-github @someone - Posts github infos form the mentioned person"
+    + "\n/hackbot-link <github-username> - Links your slack account to your github account "
      + "\n/hackbot-todo - makes a todo for you or other"
     
   });
@@ -41,19 +43,28 @@ app.command("/hackbot-repo", async ({ ack , respond}) => {
   
 })
 
-app.command("/hackbot-github", async ({ command, ack, respond }) => {
+app.command("/hackbot-github", async ({ command, ack, respond, client }) => {
   await ack();
+  const slackUserId = extractMentionedUserId(command.text);
 
-  const username = (command.text || "").trim();
-  if (!username) {
+  if (!slackUserId) {
     await respond({
-      text: "Please provide a GitHub username. Usage: /hackbot-github <username>",
+      text: "Please @-mention a Slack user . Usage: /hackbot-github @someone",
     });
     return;
   }
+const getGithubUsername=getGithubUsername(slackUserId);
+if (!GithubUsername)
+  const { user } = await client.users.info ({ user: slackUserId});
+await respond ({
+  text:"${user.real_name || user.name} hasn't linked a Github account. Please ask them to run /hackbot-linkgithub "
+});
+return;
 
+  
+    
   try {
-    const res = await axios.get(`https://api.github.com/users/${encodeURIComponent(username)}`);
+    const res = await axios.get(`https://api.github.com/users/${encodeURIComponent(GithubUsername)}`);
     const user = res.data;
     await respond({
       text:
@@ -64,14 +75,33 @@ app.command("/hackbot-github", async ({ command, ack, respond }) => {
     });
   } catch (error) {
     await respond({
-      text: `Could not fetch GitHub user "${username}". Please check the username and try again.`,
+      text: `Could not fetch GitHub user "${GithubUsername}". Please check the username and try again.`,
     });
   }
 });
 
 
+function extractMentionedUserId(text){
+  const match = (text || "").trim().match(/^<@([A-Z0-9]+)(\|[^>]*)?>$/);
+  return match ? match[1] : null ; 
+}
 
-//
+
+app.command("/hackbot-linkgithub", async ({command, ack, respond}) => {
+await ack ();
+const username = (command.text || "").trim().replace(/^@/,"");
+if (!username){
+  await respond ({
+    text: "Please provide a Github username. How it should look: /hackbot-link <githubusername>"
+  })
+
+
+
+}
+})
+
+
+
 app.command("/hackbot-todo", async ({ command, ack, respond}) => {
   await ack();
   if (!command.text) {
